@@ -1,0 +1,23 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Test</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link href="webjars/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" media="screen"> </link>
+    </head>
+    <body>
+        <script src="http://code.jquery.com/jquery.js"></script>
+        <script src="webjars/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+        <div style="margin-top: 15%">
+            <h1 class="text-center">Choose an operation</h1>
+            <div  style="margin-top: 5%" class="row vertical-align text-center">
+                <div class="btn-group">
+                    <button onclick="location.href='/createScope'" type="button" value="createScope" class="btn btn-primary">Create Scope</button>
+                    <button onclick="location.href='/listScopes'" type="button" value="listScopes" class="btn btn-primary">Scope List</button>
+                    <button onclick="location.href='/operation3'" type="button" value="operation3" class="btn btn-primary">Operation 3</button>
+                </div>
+            </div>
+        </div>
+
+    </body>
+</html>
