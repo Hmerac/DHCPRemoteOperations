@@ -8,6 +8,8 @@ The project is created and being improved at the moment for communication betwee
   - H2 Database
   - JPA
   
+- HTML, CSS, Bootstrap
+
 - Powershell
 
 ### Operations
