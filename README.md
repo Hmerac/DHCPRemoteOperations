@@ -4,9 +4,10 @@ The project is created and being improved at the moment for communication betwee
 ### Technologies
 - Spring MVC
   - Thymeleaf
+  - Web
   - H2 Database
   - JPA
-    
+  
 - Powershell
 
 ### Operations
