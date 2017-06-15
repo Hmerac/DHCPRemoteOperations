@@ -7,6 +7,7 @@ The project is created and being improved at the moment for communication betwee
 
 ### Operations (At the moment):
 Adding, deleting and listing DHCP Scopes.
+More operations will be added soon.
 
 ### Idea
 Reducing the overhead of dealing with the operations on DHCP-Servers, by making a service to achieve these operations remotely.
