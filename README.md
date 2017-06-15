@@ -1,12 +1,17 @@
 ## DHCPRemoteOperations
 The project is created and being improved at the moment for communication between Windows Server 2012 DHCP Server and a client.
 
-### Technologies (At the moment):
-- Spring
+### Technologies
+- Spring MVC
+  - Thymeleaf
+  - H2 Database
+  - JPA
+    
+- Powershell
 
-
-### Operations (At the moment):
+### Operations
 Adding, deleting and listing DHCP Scopes.
+
 More operations will be added soon.
 
 ### Idea
