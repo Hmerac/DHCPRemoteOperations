@@ -8,14 +8,56 @@
     <body>
         <script src="http://code.jquery.com/jquery.js"></script>
         <script src="webjars/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-        <div style="margin-top: 15%">
-            <h1 class="text-center">Choose an operation</h1>
-            <div  style="margin-top: 5%" class="row vertical-align text-center">
-                <div class="btn-group">
-                    <button onclick="location.href='/createScope'" type="button" value="createScope" class="btn btn-primary">Create Scope</button>
-                    <button onclick="location.href='/listScopes'" type="button" value="listScopes" class="btn btn-primary">Scope List</button>
-                    <button onclick="location.href='/operation3'" type="button" value="operation3" class="btn btn-primary">Operation 3</button>
+        
+        <div style="margin-top: 5%">
+            <h1 class="text-center">DHCP-Server Manager</h1>
+        </div>
+        
+        <div style="margin-top: 5%">
+            <h2 class="text-center">Choose an operation</h2>
+        </div>
+
+        <div style="margin-top: 2%" class="container">
+            <div class="panel-group" id="accordion">
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a class="btn-block" data-toggle="collapse" data-parent="#accordion" href="#collapse1"><span class="glyphicon glyphicon-align-justify"></span> Scopes</a>
+                        </h4>
+                    </div>
+                    <div id="collapse1" class="panel-collapse collapse in">
+                        <div class="panel-body text-center">
+                            <div class="btn-group">
+                                <button onclick="location.href = '/createScope'" type="button" value="createScope" class="btn btn-primary">Create Scope <span class="glyphicon glyphicon-plus"></span></button>
+                                <button onclick="location.href = '/listScopes'" type="button" value="listScopes" class="btn btn-primary">Scope List <span class="glyphicon glyphicon-list-alt"></span></button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
+                <div class="panel panel-primary">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse2"><span class="glyphicon glyphicon-align-justify"></span> TODO</a>
+                        </h4>
+                    </div>
+                    <div id="collapse2" class="panel-collapse collapse">
+                        <div class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+                            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
+                    </div>
+                </div>
+                <!--<div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h4 class="panel-title">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">Collapsible Group 3</a>
+                        </h4>
+                    </div>
+                    <div id="collapse3" class="panel-collapse collapse">
+                        <div class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+                            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
+                    </div>
+                </div>-->
             </div>
         </div>
 
