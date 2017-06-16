@@ -1,10 +1,5 @@
 package com.core.Repository;
 
-/**
- *
- * @author user
- */
-
 import com.core.Model.Scope;
 import org.springframework.data.jpa.repository.JpaRepository;
 

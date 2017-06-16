@@ -1,0 +1,7 @@
+com\core\WebConfiguration.class
+com\core\WebApplication.class
+com\core\Repository\ScopeRepository.class
+com\core\Controller\ScopeController.class
+com\core\Repository\ReservationRepository.class
+com\core\Model\Scope.class
+com\core\Model\Reservation.class

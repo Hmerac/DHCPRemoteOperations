@@ -4,12 +4,14 @@ package com.core.Controller;
  *
  * @author Mert Acikportali
  */
+import com.core.Model.Reservation;
 import com.core.Model.Scope;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.core.Repository.ScopeRepository;
+import com.core.Repository.ReservationRepository;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -25,6 +27,9 @@ public class ScopeController {
     @Autowired
     private ScopeRepository scopeData;
 
+    @Autowired
+    private ReservationRepository reservationData;
+
     @RequestMapping(value = "/")
     public String home() {
         return "home";
@@ -34,6 +39,12 @@ public class ScopeController {
     public String home(@RequestParam(value = "name", defaultValue = "No name") String name, Map<String, Object> model) {
         model.put("message", name);
         return "home";
+    }
+
+    @RequestMapping(value = "/createScope", method = RequestMethod.GET)
+    public String showFormG(Model model) {
+        model.addAttribute("scopes", scopeData.findAll());
+        return "createScope";
     }
 
     @RequestMapping(value = "/createScope", method = RequestMethod.POST)
@@ -85,34 +96,41 @@ public class ScopeController {
         stderr.close();
 
         //If powershell has returned successful output, add to database else don't
-        //if (createController != 2) {
+        if (createController != 2) {
             newScope.setName(name);
             newScope.setStartRange(srange);
             newScope.setEndRange(erange);
             newScope.setSubnetMask(submask);
             newScope.setDescription(description);
             newScope.setServerName(servername);
-            
+
             //Setting scope id from start range
             int thirdDot = newScope.getStartRange().lastIndexOf(".");
-            String extractedIp = newScope.getStartRange().substring(0,thirdDot+1) + "0";
+            String extractedIp = newScope.getStartRange().substring(0, thirdDot + 1) + "0";
             newScope.setScopeID(extractedIp);
-            
+
             scopeData.save(newScope);
 
             //Print successful output
             model.addAttribute("success", success);
             model.addAttribute("scope", newScope);
-        //}
+        }
 
         createController = 0;
         return "createScope";
     }
 
-    @RequestMapping(value = "/createScope", method = RequestMethod.GET)
-    public String showFormG(Model model) {
+    @RequestMapping(value = "/listScopes", method = RequestMethod.GET)
+    public String scopeList(Model model) {
         model.addAttribute("scopes", scopeData.findAll());
-        return "createScope";
+        if (deleteController == 1) {
+            model.addAttribute("deleted", deleteMethodString);
+            deleteController = 0;
+        } else if (deleteController == 2) {
+            model.addAttribute("deleted", deleteMethodString);
+            deleteController = 0;
+        }
+        return "listScopes";
     }
 
     @RequestMapping(value = "/deleteScope/{id}")
@@ -123,7 +141,7 @@ public class ScopeController {
 
         //Find corresponding scope
         Scope removeScope = scopeData.findOne(id);
-        
+
         //Powershell command to delete a scope
         String command = "powershell.exe Remove-DhcpServerv4Scope -scopeId " + removeScope.getScopeID() + " -cn " + removeScope.getServerName();
         System.out.println(command);
@@ -166,18 +184,12 @@ public class ScopeController {
 
         return "redirect:/listScopes";
     }
-    
-    @RequestMapping(value = "/listScopes", method = RequestMethod.GET)
-    public String scopeList(Model model) {
-        model.addAttribute("scopes", scopeData.findAll());
-        if (deleteController == 1) {
-            model.addAttribute("deleted", deleteMethodString);
-            deleteController = 0;
-        } else if (deleteController == 2) {
-            model.addAttribute("deleted", deleteMethodString);
-            deleteController = 0;
-        }
-        return "listScopes";
+
+    @RequestMapping(value = "/listReservations/{id}", method = RequestMethod.GET)
+    public String scopeReservations(@PathVariable Long id, Model model) {
+        model.addAttribute("scope", scopeData.findOne(id));
+        model.addAttribute("reservations", reservationData.findAll());
+        return "listReservations";
     }
 
 }

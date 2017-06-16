@@ -5,6 +5,7 @@ package com.core.Model;
  * @author user
  */
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.*;
 
 @Entity
@@ -21,6 +22,9 @@ public class Scope implements Serializable {
     private String description;
     private String servername;
     private String scopeid;
+
+    @ManyToMany
+    private List<Reservation> reservations;
 
     public long getId() {
         return id;
@@ -73,13 +77,21 @@ public class Scope implements Serializable {
     public void setServerName(String servername) {
         this.servername = servername;
     }
-    
+
     public String getScopeID() {
         return scopeid;
     }
 
     public void setScopeID(String scopeid) {
         this.scopeid = scopeid;
+    }
+
+    public List<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(List<Reservation> reservations) {
+        this.reservations = reservations;
     }
 
     @Override
