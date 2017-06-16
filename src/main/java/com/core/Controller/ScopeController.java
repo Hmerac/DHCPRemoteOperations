@@ -192,4 +192,25 @@ public class ScopeController {
         return "listReservations";
     }
 
+    @RequestMapping(value = "/listReservations/{id}", method = RequestMethod.POST)
+    public String addReservation(@PathVariable Long id, @RequestParam String name,
+            @RequestParam String clientid,
+            @RequestParam String ipaddress,
+            @RequestParam String description, Model model) {
+        
+        Scope initialScope = scopeData.findOne(id);
+        Reservation newReservation = new Reservation();
+
+        newReservation.setName(name);
+        newReservation.setClientID(clientid);
+        newReservation.setScopeID(initialScope.getScopeID());
+        newReservation.setIPAddress(ipaddress);
+        newReservation.setDescription(description);
+
+        reservationData.save(newReservation);
+
+        model.addAttribute("reservation", newReservation);
+        return "redirect:/listReservations";
+    }
+
 }

@@ -38,7 +38,7 @@ public class Reservation implements Serializable {
     }
     
     public String getClientID() {
-        return name;
+        return clientid;
     }
 
     public void setClientID(String clientid) {
@@ -62,7 +62,7 @@ public class Reservation implements Serializable {
     }
     
     public String getIPAddress() {
-        return name;
+        return ipaddress;
     }
 
     public void setIPAddress(String ipaddress) {

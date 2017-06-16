@@ -24,6 +24,7 @@
                             <th>Scope ID</th>
                             <th>IP Address</th>
                             <th>Description</th>
+                            <th>Add</th>
                             <th><span class="glyphicon glyphicon-trash"></span></th>
                         </tr>
                     </thead>
@@ -34,13 +35,24 @@
                             <td th:utext="${reservation.getScopeID()}"></td>
                             <td th:utext="${reservation.getIPAddress()}"></td>
                             <td th:utext="${reservation.getDescription()}"></td>
+                            <td th:utext="${reservation.getDescription()}"></td>
+                            <td><a>Delete</a></td>
+                        </tr>
+                        <tr><form th:action="@{/listReservations/1}" method="post" modelAttribute="reservation">
+                            <td><input type="text" id="name" name="name" required="required" class="form-control" placeholder="i.e scopetest" /></td>
+                            <td><input type="text" id="clientid" name="clientid" required="required" class="form-control" placeholder="i.e 0e-0f..." /></td>
+                            <td class="text-center" th:utext="${scope.getScopeID()}"></td>
+                            <td><input type="text" id="ipaddress" name="ipaddress" required="required" class="form-control" placeholder="i.e 192.168.5.50" /></td>
+                            <td><input type="text" id="description" name="description" required="required" class="form-control" placeholder="i.e Test" /></td>
+                            <td><input type="submit" value="Commit" class="btn btn-primary btn-block" /></td>
+                            </form>
                             <td><a>Delete</a></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
-        <button onclick="location.href = '/listScopes'" type="button" value="createScope" class="btn btn-primary form-control">List of Scopes</button>
+        <button onclick="location.href = '/listScopes'" type="button" value="createScope" class="btn btn-success form-control">List of Scopes</button>
         <br/>
         <!--<p class="text-center" style="color: red;" th:utext="${deleted}"></p>-->
     </div>
