@@ -50,7 +50,7 @@
         </div>
         <button onclick="location.href = '/createScope'" type="button" value="createScope" class="btn btn-primary form-control">Create Scope</button>
         <br/>
-        <p class="text-center" style="color: red;" th:utext="${deleted != null} ? ${#strings.replace(#strings.escapeXml(deleted),'&#10;','&lt;br&gt;')}"></p>
+        <p style="color: red;" th:utext="${deleted != null} ? ${#strings.replace(#strings.escapeXml(deleted),'&#10;','&lt;br&gt;')}"></p>
     </div>
 
 </div>

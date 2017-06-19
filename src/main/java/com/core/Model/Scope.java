@@ -23,7 +23,7 @@ public class Scope implements Serializable {
     private String servername;
     private String scopeid;
 
-    @ManyToMany
+    @OneToMany
     private List<Reservation> reservations;
 
     public long getId() {

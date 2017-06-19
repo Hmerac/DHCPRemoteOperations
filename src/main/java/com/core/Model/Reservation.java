@@ -6,7 +6,6 @@
 package com.core.Model;
 
 import java.io.Serializable;
-import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -19,6 +18,7 @@ public class Reservation implements Serializable {
     @Id
     private long id;
 
+    private String sid;
     private String clientid;
     private String name;
     private String scopeid;
@@ -27,6 +27,14 @@ public class Reservation implements Serializable {
 
     public long getId() {
         return id;
+    }
+    
+    public String getSID() {
+        return sid;
+    }
+    
+    public void setSID(String sid) {
+        this.sid = sid;
     }
 
     public String getName() {
