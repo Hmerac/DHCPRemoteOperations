@@ -1,61 +1,60 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
-        <title>Test</title>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-        <link href="webjars/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" media="screen"> </link>
-    </head>
-    <body>
-        <script src="http://code.jquery.com/jquery.js"></script>
-        <script src="webjars/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-        
-        <div style="margin-top: 5%">
-            <h1 class="text-center">DHCP-Server Manager</h1>
-        </div>
+    <title>Home</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link th:href="@{webjars/bootstrap/4.0.0-alpha.6-1/css/bootstrap.min.css}" rel="stylesheet" media="screen"> </link>
+    <link th:href="@{webjars/font-awesome/4.7.0/css/font-awesome.css}" rel="stylesheet" media="screen"> </link>
+</head>
+<body>
+<script src="http://code.jquery.com/jquery.js"></script>
+<script src="webjars/bootstrap/4.0.0-alpha.6-1/js/bootstrap.min.js"></script>
 
-        <div style="margin-top: 7%" class="container">
-            <h2>Choose an operation</h2>
-            <div class="panel-group" id="accordion">
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <a class="btn-block" data-toggle="collapse" data-parent="#accordion" href="#collapse1"><span class="glyphicon glyphicon-align-justify"></span> Scopes</a>
-                        </h4>
-                    </div>
-                    <div id="collapse1" class="panel-collapse collapse in">
-                        <div class="panel-body text-center">
-                            <div class="btn-group">
-                                <button onclick="location.href = '/createScope'" type="button" value="createScope" class="btn btn-primary">Create Scope <span class="glyphicon glyphicon-plus"></span></button>
-                                <button onclick="location.href = '/listScopes'" type="button" value="listScopes" class="btn btn-primary">Scope List <span class="glyphicon glyphicon-list-alt"></span></button>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="panel panel-primary">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <a class="btn-block" data-toggle="collapse" data-parent="#accordion" href="#collapse2"><span class="glyphicon glyphicon-align-justify"></span> TODO</a>
-                        </h4>
-                    </div>
-                    <div id="collapse2" class="panel-collapse collapse">
-                        <div class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
+<div class="text-center" style="margin-top: 5%">
+    <span class="fa fa-cogs fa-5x"></span><br/>
+    <h1>DHCP-Server Manager</h1>
+</div>
+
+<div style="margin-top: 7%" class="container">
+    <h2>Choose an operation</h2>
+    <div id="faq" role="tablist" aria-multiselectable="true">
+
+        <div class="card">
+            <div class="card-header" role="tab" id="scopeOperations">
+                <h5 class="card-title">
+                    <a class="btn-block" data-toggle="collapse" data-parent="#faq" href="#scopeOperationButtons" aria-expanded="true" aria-controls="scopeOperationButtons">
+                        <span class="fa fa-bars fa-lg" aria-hidden="true"></span>&ensp;Scope Operations
+                    </a>
+                </h5>
+            </div>
+            <div id="scopeOperationButtons" class="collapse show" role="tabcard" aria-labelledby="scopeOperations">
+                <div class="card-block text-center">
+                    <div class="btn-group">
+                        <button onclick="location.href = '/createScope'" type="button" value="createScope" class="btn btn-primary"><span class="fa fa-plus fa-lg"></span> Create Scope</button>
+                        <button onclick="location.href = '/listScopes'" type="button" value="listScopes" class="btn btn-primary"><span class="fa fa-list-ol fa-lg"></span> Scope List</button>
                     </div>
                 </div>
-                <!--<div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">Collapsible Group 3</a>
-                        </h4>
-                    </div>
-                    <div id="collapse3" class="panel-collapse collapse">
-                        <div class="panel-body">Lorem ipsum dolor sit amet, consectetur adipisicing elit,
-                            sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                            quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
-                    </div>
-                </div>-->
             </div>
         </div>
-    </body>
+
+        <div class="card">
+            <div class="card-header" role="tab" id="questionTwo">
+                <h5 class="card-title">
+                    <a class="collapsed btn-block" data-toggle="collapse" data-parent="#faq" href="#answerTwo" aria-expanded="false" aria-controls="answerTwo">
+                        <span class="fa fa-bars fa-lg" aria-hidden="true"></span>&ensp;Operation 2
+                    </a>
+                </h5>
+            </div>
+            <div id="answerTwo" class="collapse" role="tabcard" aria-labelledby="questionTwo">
+                <div class="card-block">
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit,
+                    sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
 </html>

@@ -24,7 +24,7 @@ public class ScopeController implements ScopeControllerInterface {
     int ScopeDeleteController = 0;
     int ReservationCreateController = 0;
     int ReservationDeleteController = 0;
-    String deleteMethodString = "";
+    String deleteMethodString = "Scope has been deleted successfully";
 
     @Autowired
     private ScopeRepository scopeData;
@@ -94,7 +94,7 @@ public class ScopeController implements ScopeControllerInterface {
         stderr.close();
 
         //If powershell has returned successful output, add to database else don't
-        if (ScopeCreateController != 2) {
+        //if (ScopeCreateController != 2) {
             newScope.setName(name);
             newScope.setStartRange(srange);
             newScope.setEndRange(erange);
@@ -112,7 +112,7 @@ public class ScopeController implements ScopeControllerInterface {
             //Print successful output
             model.addAttribute("success", success);
             model.addAttribute("scope", newScope);
-        }
+        //}
 
         ScopeCreateController = 0;
         return "createScope";
@@ -155,7 +155,7 @@ public class ScopeController implements ScopeControllerInterface {
         while ((line = stdout.readLine()) != null) {
             System.out.println(line);
             success += line + "\n";
-            deleteMethodString = "Scope has been deleted successfully.";
+            deleteMethodString += success;
             ScopeDeleteController = 1;
         }
 
@@ -173,10 +173,10 @@ public class ScopeController implements ScopeControllerInterface {
         stderr.close();
 
         //If powershell has returned successful output, add to database else don't
-        if (ScopeDeleteController != 2) {
+        //if (ScopeDeleteController != 2) {
             scopeData.delete(id);
             ScopeDeleteController = 0;
-        }
+        //}
 
         return "redirect:/listScopes";
     }
@@ -197,7 +197,7 @@ public class ScopeController implements ScopeControllerInterface {
         model.addAttribute("scope", scopeData.findOne(id));
         model.addAttribute("reservations", reservationData.findAll());
 
-        String success = "Reservation added successfully.";
+        String success = "Reservation added successfully";
         String exception = " ";
 
         Scope initialScope = scopeData.findOne(id);
@@ -238,7 +238,7 @@ public class ScopeController implements ScopeControllerInterface {
 
         stderr.close();
 
-        if (ReservationCreateController != 2) {
+        //if (ReservationCreateController != 2) {
             newReservation.setName(name);
             newReservation.setSID(initialScope.getId() + "");
             newReservation.setClientID(clientid);
@@ -249,23 +249,67 @@ public class ScopeController implements ScopeControllerInterface {
             initialScope.getReservations().add(newReservation);
             reservationData.save(newReservation);
             
+            ReservationCreateController = 0;
+
             model.addAttribute("success", success);
             model.addAttribute("reservation", newReservation);
-        }
+        //}
 
         return "listReservations";
     }
 
-    public String deleteReservation(@PathVariable Long id, Model model) {
-
-        model.addAttribute("scope", scopeData.findOne(id));
-        model.addAttribute("reservations", reservationData.findAll());
+    public String deleteReservation(@PathVariable Long id, Model model) throws IOException {
+        
+        String success = "Reservation has been deleted successfully";
+        String exception = " ";
 
         Reservation initialReservation = reservationData.findOne(id);
         Scope initialScope = scopeData.findOne(Long.parseLong(initialReservation.getSID()));
-        initialScope.getReservations().remove(initialReservation);
 
-        reservationData.delete(id);
+        //Powershell command to create a new reservation
+        String command = "powershell.exe  Remove-DhcpServerv4Reservation -ScopeId "
+                + initialScope.getScopeID() + " -ClientId " + initialReservation.getClientID() + " -IPAddress " + initialReservation.getIPAddress() + " ";
+
+        // Executing the command
+        Process powerShellProcess = Runtime.getRuntime().exec(command);
+
+        // Getting the results
+        powerShellProcess.getOutputStream().close();
+
+        String line;
+        //Successful output from powershell
+        BufferedReader stdout = new BufferedReader(new InputStreamReader(
+                powerShellProcess.getInputStream()));
+        while ((line = stdout.readLine()) != null) {
+            System.out.println(line);
+            success += line + "\n";
+            ReservationDeleteController = 1;
+        }
+
+        stdout.close();
+        //Exception output from powershell
+        BufferedReader stderr = new BufferedReader(new InputStreamReader(
+                powerShellProcess.getErrorStream()));
+        while ((line = stderr.readLine()) != null) {
+            System.out.println(line);
+            exception += line + "\n";
+            ReservationDeleteController = 2;
+        }
+
+        //Print exception output
+        model.addAttribute("exception", exception);
+
+        stderr.close();
+
+        //if (ReservationCreateController != 2) {
+            initialScope.getReservations().remove(initialReservation);
+            reservationData.delete(id);
+            model.addAttribute("success", success);
+            ReservationDeleteController = 0;
+        //}
+
+        model.addAttribute("scope", scopeData.findOne(Long.parseLong(initialReservation.getSID())));
+        model.addAttribute("reservations", reservationData.findAll());
 
         return "listReservations";
     }

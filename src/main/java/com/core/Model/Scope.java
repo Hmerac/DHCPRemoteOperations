@@ -21,6 +21,7 @@ public class Scope implements Serializable {
     private String submask;
     private String description;
     private String servername;
+    // Scope ID is initialized during form submit phase
     private String scopeid;
 
     @OneToMany

@@ -43,6 +43,6 @@ public interface ScopeControllerInterface {
             @RequestParam String description, Model model) throws IOException;
 
     @RequestMapping(value = "/deleteReservation/{id}")
-    public String deleteReservation(@PathVariable Long id, Model model);
+    public String deleteReservation(@PathVariable Long id, Model model) throws IOException ;
 
 }

@@ -1,20 +1,28 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
-    <title>Test</title>
+    <title>Create Scope</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-    <link href="webjars/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" media="screen"> </link>
+    <link href="webjars/bootstrap/4.0.0-alpha.6-1/css/bootstrap.min.css" rel="stylesheet" media="screen"> </link>
+    <link href="webjars/font-awesome/4.7.0/css/font-awesome.css" rel="stylesheet" media="screen"> </link>
 </head>
 <body>
 <script src="http://code.jquery.com/jquery.js"></script>
-<script src="webjars/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="webjars/bootstrap/4.0.0-alpha.6-1/js/bootstrap.min.js"></script>
 
-<div style="margin-top: 10%">
-    <h1 class="text-center"><button onclick="location.href = '/home'" type="button" class="btn btn-link btn-lg"><span class="glyphicon glyphicon-home"></span></button> Create a New Scope</h1>
-
+<div style="margin-top: 2%">
+    <h1 class="text-center">
+        <span class="fa fa-plus fa-3x"></span><br/>
+        Create a New Scope
+    </h1>
     <div class="container">
 
-        <form th:action="@{/createScope}" method="post" modelAttribute="scope">
+        <nav class="breadcrumb">
+            <a class="breadcrumb-item" href="/home">Home</a>
+            <a class="breadcrumb-item" href="/listScopes">Scopes</a>
+            <span class="breadcrumb-item active">Create a Scope</span>
+        </nav>
+        <form th:action="@{/createScope}" id="createScopeForm" method="post" modelAttribute="scope">
             <h2 class="form-signin-heading">Enter the parameters</h2>
 
             <label for="firstparameter">Name of the Scope</label>
@@ -38,7 +46,7 @@
             <input type="submit" value="Commit" class="btn btn-lg btn-primary btn-block" />
             <br/>
             <button onclick="location.href = '/listScopes'" type="button" value="listScopes" class="btn btn-success form-control">List of Scopes</button>
-            
+
             <br/>
             <p class="text-center" th:utext="${success != null} ? ${#strings.replace(#strings.escapeXml(success),'&#10;','&lt;br&gt;')}"></p>
             <br/>
