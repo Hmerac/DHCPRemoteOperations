@@ -18,11 +18,11 @@
     <div class="container">
 
         <nav class="breadcrumb">
-            <a class="breadcrumb-item" href="/home">Home</a>
+            <a class="breadcrumb-item" href="/home"><i class="fa fa-home" aria-hidden="true"></i> Home</a>
             <a class="breadcrumb-item" href="/listScopes">Scopes</a>
             <span class="breadcrumb-item active">Create a Scope</span>
         </nav>
-        <form th:action="@{/createScope}" id="createScopeForm" method="post" modelAttribute="scope">
+        <form th:action="@{/createScope}" method="post" modelAttribute="scope">
             <h2 class="form-signin-heading">Enter the parameters</h2>
 
             <label for="firstparameter">Name of the Scope</label>

@@ -95,23 +95,23 @@ public class ScopeController implements ScopeControllerInterface {
 
         //If powershell has returned successful output, add to database else don't
         //if (ScopeCreateController != 2) {
-            newScope.setName(name);
-            newScope.setStartRange(srange);
-            newScope.setEndRange(erange);
-            newScope.setSubnetMask(submask);
-            newScope.setDescription(description);
-            newScope.setServerName(servername);
+        newScope.setName(name);
+        newScope.setStartRange(srange);
+        newScope.setEndRange(erange);
+        newScope.setSubnetMask(submask);
+        newScope.setDescription(description);
+        newScope.setServerName(servername);
 
-            //Setting scope id from start range
-            int thirdDot = newScope.getStartRange().lastIndexOf(".");
-            String extractedIp = newScope.getStartRange().substring(0, thirdDot + 1) + "0";
-            newScope.setScopeID(extractedIp);
+        //Setting scope id from start range
+        int thirdDot = newScope.getStartRange().lastIndexOf(".");
+        String extractedIp = newScope.getStartRange().substring(0, thirdDot + 1) + "0";
+        newScope.setScopeID(extractedIp);
 
-            scopeData.save(newScope);
+        scopeData.save(newScope);
 
-            //Print successful output
-            model.addAttribute("success", success);
-            model.addAttribute("scope", newScope);
+        //Print successful output
+        model.addAttribute("success", success);
+        model.addAttribute("scope", newScope);
         //}
 
         ScopeCreateController = 0;
@@ -174,8 +174,8 @@ public class ScopeController implements ScopeControllerInterface {
 
         //If powershell has returned successful output, add to database else don't
         //if (ScopeDeleteController != 2) {
-            scopeData.delete(id);
-            ScopeDeleteController = 0;
+        scopeData.delete(id);
+        ScopeDeleteController = 0;
         //}
 
         return "redirect:/listScopes";
@@ -239,27 +239,27 @@ public class ScopeController implements ScopeControllerInterface {
         stderr.close();
 
         //if (ReservationCreateController != 2) {
-            newReservation.setName(name);
-            newReservation.setSID(initialScope.getId() + "");
-            newReservation.setClientID(clientid);
-            newReservation.setScopeID(initialScope.getScopeID());
-            newReservation.setIPAddress(ipaddress);
-            newReservation.setDescription(description);
+        newReservation.setName(name);
+        newReservation.setSID(initialScope.getId() + "");
+        newReservation.setClientID(clientid);
+        newReservation.setScopeID(initialScope.getScopeID());
+        newReservation.setIPAddress(ipaddress);
+        newReservation.setDescription(description);
 
-            initialScope.getReservations().add(newReservation);
-            reservationData.save(newReservation);
-            
-            ReservationCreateController = 0;
+        initialScope.getReservations().add(newReservation);
+        reservationData.save(newReservation);
 
-            model.addAttribute("success", success);
-            model.addAttribute("reservation", newReservation);
+        ReservationCreateController = 0;
+
+        model.addAttribute("success", success);
+        model.addAttribute("reservation", newReservation);
         //}
 
         return "listReservations";
     }
 
     public String deleteReservation(@PathVariable Long id, Model model) throws IOException {
-        
+
         String success = "Reservation has been deleted successfully";
         String exception = " ";
 
@@ -302,16 +302,66 @@ public class ScopeController implements ScopeControllerInterface {
         stderr.close();
 
         //if (ReservationCreateController != 2) {
-            initialScope.getReservations().remove(initialReservation);
-            reservationData.delete(id);
-            model.addAttribute("success", success);
-            ReservationDeleteController = 0;
+        initialScope.getReservations().remove(initialReservation);
+        reservationData.delete(id);
+        model.addAttribute("success", success);
+        ReservationDeleteController = 0;
         //}
 
         model.addAttribute("scope", scopeData.findOne(Long.parseLong(initialReservation.getSID())));
         model.addAttribute("reservations", reservationData.findAll());
 
         return "listReservations";
+    }
+
+    public String leaseList(@PathVariable Long id, Model model) throws IOException {
+
+        String output = "";
+        String exception = "";
+
+        Scope initialScope = scopeData.findOne(id);
+
+        model.addAttribute("scope", initialScope);
+
+        //Powershell command to create a new reservation
+        String command = "powershell.exe  Get-DHCPServerv4Scope -ScopeId "
+                + initialScope.getScopeID() + " | " + "Get-DHCPServerv4Lease";
+
+        // Executing the command
+        Process powerShellProcess = Runtime.getRuntime().exec(command);
+
+        // Getting the results
+        powerShellProcess.getOutputStream().close();
+
+        String line;
+        //Successful output from powershell
+        BufferedReader stdout = new BufferedReader(new InputStreamReader(
+                powerShellProcess.getInputStream()));
+        while ((line = stdout.readLine()) != null) {
+            System.out.println(line);
+            output += line + "\n";
+            ReservationDeleteController = 1;
+        }
+
+        stdout.close();
+        //Exception output from powershell
+        BufferedReader stderr = new BufferedReader(new InputStreamReader(
+                powerShellProcess.getErrorStream()));
+        while ((line = stderr.readLine()) != null) {
+            System.out.println(line);
+            exception += line + "\n";
+            ReservationDeleteController = 2;
+        }
+
+        //Print success output
+        model.addAttribute("output", output);
+
+        //Print exception output
+        model.addAttribute("exception", exception);
+
+        stderr.close();
+
+        return "listLeases";
     }
 
 }

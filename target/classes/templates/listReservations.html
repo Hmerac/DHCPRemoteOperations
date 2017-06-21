@@ -20,7 +20,7 @@
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12">
                 <nav class="breadcrumb">
-                    <a class="breadcrumb-item" href="/home">Home</a>
+                    <a class="breadcrumb-item" href="/home"><i class="fa fa-home" aria-hidden="true"></i> Home</a>
                     <a class="breadcrumb-item" href="/listScopes">Scopes</a>
                     <span class="breadcrumb-item active">Reservations</span>
                 </nav>
@@ -46,9 +46,9 @@
                                 <td th:utext="${reservation.getIPAddress()}"></td>
                                 <td style="word-wrap:break-word; min-width:120px; max-width:160px;" th:utext="${reservation.getDescription()}"></td>
                                 <td><a th:href="@{/deleteReservation/{id}(id=${reservation.id})}">Delete</a></td>
-                        </tr>
-                        <tr>
-                            <td><input type="text" id="name" name="name" required="required" class="form-control" placeholder="i.e scopetest" /></td>
+                            </tr>
+                            <tr>
+                                <td><input type="text" id="name" name="name" required="required" class="form-control" placeholder="i.e scopetest" /></td>
                         <td><input type="text" id="clientid" name="clientid" required="required" class="form-control" placeholder="i.e 0e-0f..." /></td>
                         <td class="text-center" th:utext="${scope.getScopeID()}"></td>
                         <td><input type="text" id="ipaddress" name="ipaddress" required="required" class="form-control" placeholder="i.e 192.168.5.50" /></td>

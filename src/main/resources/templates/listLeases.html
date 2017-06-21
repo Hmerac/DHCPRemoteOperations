@@ -1,0 +1,36 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+    <title>Home</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <link th:href="@{/webjars/bootstrap/4.0.0-alpha.6-1/css/bootstrap.min.css}" rel="stylesheet" media="screen"> </link>
+    <link th:href="@{/webjars/font-awesome/4.7.0/css/font-awesome.css}" rel="stylesheet" media="screen"> </link>
+</head>
+<body>
+<script src="http://code.jquery.com/jquery.js"></script>
+<script src="webjars/bootstrap/4.0.0-alpha.6-1/js/bootstrap.min.js"></script>
+
+<div class="container">
+    <div class="text-center" style="margin-top: 5%">
+        <h1 class="text-center">
+            <span class="fa fa-plug fa-3x"></span><br/>
+            List of Leases
+        </h1>
+    </div>
+    <nav class="breadcrumb">
+        <a class="breadcrumb-item" href="/home"><i class="fa fa-home" aria-hidden="true"></i> Home</a>
+        <a class="breadcrumb-item" href="/listScopes">Scopes</a>
+        <span class="breadcrumb-item active">Leases</span>
+    </nav>
+    <h2>Leases to <span th:text='${scope.getName()}'></span> (<span th:text='${scope.getScopeID()}'></span>)</h2>
+    <div class="text-center">
+        <textarea rows="20" cols="135" id="leases" th:field="${output}" placeholder="Output from PowerShell...">
+        <!--<p th:text=""></p>-->
+        </textarea>
+    </div>
+    <button onclick="location.href = '/listScopes'" type="button" value="createScope" class="btn btn-success form-control">List of Scopes</button>
+    <span style="color:red;" th:text="${exception}"></span>
+</div>
+
+</body>
+</html>
