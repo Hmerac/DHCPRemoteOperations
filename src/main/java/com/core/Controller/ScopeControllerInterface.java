@@ -45,7 +45,7 @@ public interface ScopeControllerInterface {
     @RequestMapping(value = "/deleteReservation/{id}")
     public String deleteReservation(@PathVariable Long id, Model model) throws IOException;
     
-    @RequestMapping(value = "listLeases/{id}")
+    @RequestMapping(value = "listLeases/{id}", method = RequestMethod.GET)
     public String leaseList(@PathVariable Long id, Model model) throws IOException;
 
 }

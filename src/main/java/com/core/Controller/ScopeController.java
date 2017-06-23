@@ -55,12 +55,12 @@ public class ScopeController implements ScopeControllerInterface {
 
         Scope newScope = new Scope();
 
-        String success = "Scope added successfully.";
+        String success = "Scope has been added successfully.";
         String exception = " ";
 
         //Powershell command to create a new scope
         String command = "powershell.exe  Add-DhcpServerv4Scope -Name '" + name + "' -StartRange "
-                + srange + " -EndRange " + erange + " -SubnetMask " + submask + " -Description '" + description + "' -cn " + servername + " ";
+                + srange + " -EndRange " + erange + " -SubnetMask " + submask + " -Description '" + description + "' -cn " + servername + " | Format-List";
 
         // Executing the command
         Process powerShellProcess = Runtime.getRuntime().exec(command);
@@ -94,25 +94,25 @@ public class ScopeController implements ScopeControllerInterface {
         stderr.close();
 
         //If powershell has returned successful output, add to database else don't
-        //if (ScopeCreateController != 2) {
-        newScope.setName(name);
-        newScope.setStartRange(srange);
-        newScope.setEndRange(erange);
-        newScope.setSubnetMask(submask);
-        newScope.setDescription(description);
-        newScope.setServerName(servername);
+        if (ScopeCreateController != 2) {
+            newScope.setName(name);
+            newScope.setStartRange(srange);
+            newScope.setEndRange(erange);
+            newScope.setSubnetMask(submask);
+            newScope.setDescription(description);
+            newScope.setServerName(servername);
 
-        //Setting scope id from start range
-        int thirdDot = newScope.getStartRange().lastIndexOf(".");
-        String extractedIp = newScope.getStartRange().substring(0, thirdDot + 1) + "0";
-        newScope.setScopeID(extractedIp);
+            //Setting scope id from start range
+            int thirdDot = newScope.getStartRange().lastIndexOf(".");
+            String extractedIp = newScope.getStartRange().substring(0, thirdDot + 1) + "0";
+            newScope.setScopeID(extractedIp);
 
-        scopeData.save(newScope);
+            scopeData.save(newScope);
 
-        //Print successful output
-        model.addAttribute("success", success);
-        model.addAttribute("scope", newScope);
-        //}
+            //Print successful output
+            model.addAttribute("success", success);
+            model.addAttribute("scope", newScope);
+        }
 
         ScopeCreateController = 0;
         return "createScope";
@@ -135,23 +135,34 @@ public class ScopeController implements ScopeControllerInterface {
         String success = " ";
         String exception = " ";
 
-        //Find corresponding scope
+        //Find the corresponding scope
         Scope removeScope = scopeData.findOne(id);
+        
+        //Powershell command to delete reservations under the scope
+        String command1 = "powershell.exe Remove-DhcpServerv4Lease -ComputerName " + removeScope.getServerName() + " -scopeId " + removeScope.getScopeID() + " | Format-List";
 
+        //Powershell command to delete leases under the scope
+        String command2 = "powershell.exe Remove-DhcpServerv4Reservation -ComputerName " + removeScope.getServerName() + " -scopeId " + removeScope.getScopeID() + " | Format-List";
+        
         //Powershell command to delete a scope
-        String command = "powershell.exe Remove-DhcpServerv4Scope -scopeId " + removeScope.getScopeID() + " -cn " + removeScope.getServerName();
-        System.out.println(command);
+        String command3 = "powershell.exe Remove-DhcpServerv4Scope -scopeId " + removeScope.getScopeID() + " -cn " + removeScope.getServerName() + " | Format-List";
 
-        // Executing the command
-        Process powerShellProcess = Runtime.getRuntime().exec(command);
+        // Executing the delete all reservations under the scope command
+        Process powerShellProcess1 = Runtime.getRuntime().exec(command1);
+        
+        // Executing the delete all leases under the scope command
+        Process powerShellProcess2 = Runtime.getRuntime().exec(command2);
+        
+        // Executing the delete scope command
+        Process powerShellProcess3 = Runtime.getRuntime().exec(command3);
 
         // Getting the results
-        powerShellProcess.getOutputStream().close();
+        powerShellProcess3.getOutputStream().close();
 
         String line;
         //Successful output from powershell
         BufferedReader stdout = new BufferedReader(new InputStreamReader(
-                powerShellProcess.getInputStream()));
+                powerShellProcess3.getInputStream()));
         while ((line = stdout.readLine()) != null) {
             System.out.println(line);
             success += line + "\n";
@@ -162,7 +173,7 @@ public class ScopeController implements ScopeControllerInterface {
         stdout.close();
         //Exception output from powershell
         BufferedReader stderr = new BufferedReader(new InputStreamReader(
-                powerShellProcess.getErrorStream()));
+                powerShellProcess3.getErrorStream()));
         while ((line = stderr.readLine()) != null) {
             System.out.println(line);
             exception += line + "\n";
@@ -173,10 +184,10 @@ public class ScopeController implements ScopeControllerInterface {
         stderr.close();
 
         //If powershell has returned successful output, add to database else don't
-        //if (ScopeDeleteController != 2) {
-        scopeData.delete(id);
-        ScopeDeleteController = 0;
-        //}
+        if (ScopeDeleteController != 2) {
+            scopeData.delete(id);
+            ScopeDeleteController = 0;
+        }
 
         return "redirect:/listScopes";
     }
@@ -197,7 +208,7 @@ public class ScopeController implements ScopeControllerInterface {
         model.addAttribute("scope", scopeData.findOne(id));
         model.addAttribute("reservations", reservationData.findAll());
 
-        String success = "Reservation added successfully";
+        String success = "Reservation has been added successfully";
         String exception = " ";
 
         Scope initialScope = scopeData.findOne(id);
@@ -205,7 +216,7 @@ public class ScopeController implements ScopeControllerInterface {
 
         //Powershell command to create a new reservation
         String command = "powershell.exe  Add-DhcpServerv4Reservation -Name '" + name + "' -ScopeId "
-                + initialScope.getScopeID() + " -ClientId " + clientid + " -IPAddress " + ipaddress + " -Description '" + description + "' ";
+                + initialScope.getScopeID() + " -ClientId " + clientid + " -IPAddress " + ipaddress + " -Description '" + description + "' | Format-List";
 
         // Executing the command
         Process powerShellProcess = Runtime.getRuntime().exec(command);
@@ -238,22 +249,22 @@ public class ScopeController implements ScopeControllerInterface {
 
         stderr.close();
 
-        //if (ReservationCreateController != 2) {
-        newReservation.setName(name);
-        newReservation.setSID(initialScope.getId() + "");
-        newReservation.setClientID(clientid);
-        newReservation.setScopeID(initialScope.getScopeID());
-        newReservation.setIPAddress(ipaddress);
-        newReservation.setDescription(description);
+        if (ReservationCreateController != 2) {
+            newReservation.setName(name);
+            newReservation.setSID(initialScope.getId() + "");
+            newReservation.setClientID(clientid);
+            newReservation.setScopeID(initialScope.getScopeID());
+            newReservation.setIPAddress(ipaddress);
+            newReservation.setDescription(description);
 
-        initialScope.getReservations().add(newReservation);
-        reservationData.save(newReservation);
+            initialScope.getReservations().add(newReservation);
+            reservationData.save(newReservation);
+
+            model.addAttribute("success", success);
+            model.addAttribute("reservation", newReservation);
+        }
 
         ReservationCreateController = 0;
-
-        model.addAttribute("success", success);
-        model.addAttribute("reservation", newReservation);
-        //}
 
         return "listReservations";
     }
@@ -267,8 +278,8 @@ public class ScopeController implements ScopeControllerInterface {
         Scope initialScope = scopeData.findOne(Long.parseLong(initialReservation.getSID()));
 
         //Powershell command to create a new reservation
-        String command = "powershell.exe  Remove-DhcpServerv4Reservation -ScopeId "
-                + initialScope.getScopeID() + " -ClientId " + initialReservation.getClientID() + " -IPAddress " + initialReservation.getIPAddress() + " ";
+        String command = "powershell.exe Remove-DhcpServerv4Reservation -ComputerName '"
+                + initialScope.getServerName() + "' -IPAddress " + initialReservation.getIPAddress() + " | Format-List";
 
         // Executing the command
         Process powerShellProcess = Runtime.getRuntime().exec(command);
@@ -301,12 +312,13 @@ public class ScopeController implements ScopeControllerInterface {
 
         stderr.close();
 
-        //if (ReservationCreateController != 2) {
-        initialScope.getReservations().remove(initialReservation);
-        reservationData.delete(id);
-        model.addAttribute("success", success);
+        if (ReservationCreateController != 2) {
+            initialScope.getReservations().remove(initialReservation);
+            reservationData.delete(id);
+            model.addAttribute("success", success);
+        }
+
         ReservationDeleteController = 0;
-        //}
 
         model.addAttribute("scope", scopeData.findOne(Long.parseLong(initialReservation.getSID())));
         model.addAttribute("reservations", reservationData.findAll());
@@ -316,14 +328,14 @@ public class ScopeController implements ScopeControllerInterface {
 
     public String leaseList(@PathVariable Long id, Model model) throws IOException {
 
-        String output = "";
+        String success = "";
         String exception = "";
 
         Scope initialScope = scopeData.findOne(id);
 
         model.addAttribute("scope", initialScope);
 
-        //Powershell command to create a new reservation
+        //Powershell command to get leases
         String command = "powershell.exe  Get-DHCPServerv4Scope -ScopeId "
                 + initialScope.getScopeID() + " | " + "Get-DHCPServerv4Lease";
 
@@ -339,8 +351,7 @@ public class ScopeController implements ScopeControllerInterface {
                 powerShellProcess.getInputStream()));
         while ((line = stdout.readLine()) != null) {
             System.out.println(line);
-            output += line + "\n";
-            ReservationDeleteController = 1;
+            success += line + "\n";
         }
 
         stdout.close();
@@ -350,11 +361,10 @@ public class ScopeController implements ScopeControllerInterface {
         while ((line = stderr.readLine()) != null) {
             System.out.println(line);
             exception += line + "\n";
-            ReservationDeleteController = 2;
         }
 
         //Print success output
-        model.addAttribute("output", output);
+        model.addAttribute("success", success);
 
         //Print exception output
         model.addAttribute("exception", exception);

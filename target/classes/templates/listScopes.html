@@ -7,8 +7,8 @@
     <link th:href="@{webjars/font-awesome/4.7.0/css/font-awesome.css}" rel="stylesheet" media="screen"> </link>
 </head>
 <body>
-<script src="http://code.jquery.com/jquery.js"></script>
-<script src="webjars/bootstrap/4.0.0-alpha.6-1/js/bootstrap.min.js"></script>
+<script th:src="@{webjars/jquery/3.1.1-1/jquery.min.js}"></script>
+<script th:src="@{webjars/bootstrap/4.0.0-alpha.6-1/js/bootstrap.min.js}"></script>
 
 <div style="margin-top: 5%">
     <h1 class="text-center">
@@ -51,7 +51,7 @@
                             <td th:utext="${scope.getServerName()}"></td>
                             <td><a th:href="@{/listLeases/{id}(id=${scope.id})}">Leases</a></td>
                             <td><a th:href="@{/listReservations/{id}(id=${scope.id})}">Reservations</a></td>
-                            <td><a data-toggle="modal" th:attr="data-target='#deleteScopeConfirmation' + ${scope.id}" th:href="@{/deleteScope/{id}(id=${scope.id})}">Delete</a></td>
+                            <td><a data-toggle="modal" th:attr="data-target='#deleteScopeConfirmation' + ${scope.id}" href="#">Delete</a></td>
                             <!-- Confirmation Modal to Delete Scope -->
                     <div th:id="deleteScopeConfirmation + ${scope.id}" class="modal fade" role="dialog">
                         <div class="modal-dialog">
@@ -64,7 +64,7 @@
                                     <div class="text-center">
                                         <span class="fa fa-exclamation-triangle fa-5x" style="color:orange"></span>
                                     </div>
-                                    <p>Deleting this scope will also delete all information(Reservations etc.) under this scope.</p>
+                                    <p>Deleting this scope will also delete all information(Leases, Reservations etc.) under this scope.</p>
                                     <p>Are you sure you want to delete this scope?</p>
                                 </div>
                                 <div class="modal-footer">

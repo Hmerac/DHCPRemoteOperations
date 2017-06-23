@@ -24,8 +24,8 @@
     </nav>
     <h2>Leases to <span th:text='${scope.getName()}'></span> (<span th:text='${scope.getScopeID()}'></span>)</h2>
     <div class="text-center">
-        <textarea rows="20" cols="135" id="leases" th:field="${output}" placeholder="Output from PowerShell...">
-        <!--<p th:text=""></p>-->
+        <textarea rows="20" cols="135" id="leases" th:inline="text" placeholder="Output from PowerShell...">
+        [[${success}]]
         </textarea>
     </div>
     <button onclick="location.href = '/listScopes'" type="button" value="createScope" class="btn btn-success form-control">List of Scopes</button>
