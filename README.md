@@ -15,11 +15,6 @@ The project is created and being improved at the moment for communication betwee
 ### Operations
 Adding, deleting and listing DHCP Scopes.
 
-Adding, deleting and listing Reservations for the corresponding scope.
-
-Listing Leases to the corresponding scope.
-
-
 More operations will be added soon.
 
 ### Idea
