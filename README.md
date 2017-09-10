@@ -1,5 +1,5 @@
 ## DHCPRemoteOperations
-The project is created and being improved at the moment for communication between Windows Server 2012 DHCP Server and client.
+The project is created for communication between Windows Server 2012 DHCP Server and client.
 
 ### Technologies
 - Spring MVC
